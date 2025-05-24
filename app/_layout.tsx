@@ -4,9 +4,10 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
-
+import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storeData, getData } from "@/lib/utils";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -17,11 +18,11 @@ export default function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkLogin = async () => {
-      const token = await AsyncStorage.getItem('token');
-      setIsLoggedIn(!!token);
-    };
-    checkLogin();
+    getData("password").then((data) => {
+            if (data) {
+                setIsLoggedIn(false);
+            }
+        });
   }, []);
 
   if (!loaded || isLoggedIn === null) {
@@ -31,7 +32,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack 
+      screenOptions={{ headerShown: false,
+        animation: 'fade_from_bottom',
+        gestureEnabled: true,
+       }}>
         {isLoggedIn ? (
           // Show tabs when logged in
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -44,6 +49,7 @@ export default function RootLayout() {
         )}
         <Stack.Screen name="+not-found" />
       </Stack>
+      <Toast />
       <StatusBar style="auto" />
     </ThemeProvider>
   );
