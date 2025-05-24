@@ -4,7 +4,7 @@
     "slug": "Nanee",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Nanee_logo.png",
     "scheme": "nanee",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,7 +14,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#00000"
       },
       "edgeToEdgeEnabled": true
     },
@@ -32,6 +32,15 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-barcode-scanner",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow nanee to access your camera",
+          "microphonePermission": "Allow nanee to access your microphone",
+          "recordAudioAndroid": false
         }
       ]
     ],
