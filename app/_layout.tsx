@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme as NavigationDefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -8,6 +8,15 @@ import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { storeData, getData } from "@/lib/utils";
+import { View, Text } from 'react-native';
+
+const MyLightTheme = {
+  ...NavigationDefaultTheme,
+  colors: {
+    ...NavigationDefaultTheme.colors,
+    background: '#000000', // 👈 Set to black (or your theme)
+  },
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -15,28 +24,26 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     getData("password").then((data) => {
-            if (data) {
-                setIsLoggedIn(false);
-            }
-        });
+      if (data) {
+        setIsLoggedIn(true);
+      }
+    });
   }, []);
 
-  if (!loaded || isLoggedIn === null) {
-    // Still loading fonts or checking login state
-    return null;
-  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack 
-      screenOptions={{ headerShown: false,
-        animation: 'fade_from_bottom',
-        gestureEnabled: true,
-       }}>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : MyLightTheme}>
+
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade_from_bottom',
+          gestureEnabled: true,
+        }}>
         {isLoggedIn ? (
           // Show tabs when logged in
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
