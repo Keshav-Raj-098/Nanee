@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { Platform, ScrollView, StyleSheet, View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './index'
+import { styles } from '../(tabs)/index'
 import logo from "@/assets/images/Nanee_logo.png";
 import success from "@/assets/images/success.svg";
 import shield from "@/assets/images/shield.png";
