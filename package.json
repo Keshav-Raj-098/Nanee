@@ -21,6 +21,7 @@
     "expo": "~53.0.9",
     "expo-barcode-scanner": "^13.0.1",
     "expo-blur": "~14.1.4",
+    "expo-camera": "~16.1.6",
     "expo-clipboard": "~7.1.4",
     "expo-constants": "~17.1.6",
     "expo-font": "~13.3.1",
@@ -37,6 +38,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
+    "react-native-document-picker": "^9.3.1",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-qrcode-svg": "^6.3.15",
     "react-native-reanimated": "~3.17.4",
@@ -46,8 +48,7 @@
     "react-native-toast-message": "^2.3.0",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
-    "typescript": "~5.8.3",
-    "expo-camera": "~16.1.6"
+    "typescript": "~5.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

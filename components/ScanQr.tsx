@@ -17,11 +17,20 @@ export default function ScanQr({ setScanQr }: Props) {
     }
 
     if (!permission.granted) {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.message}>We need your permission to show the camera</Text>
-                <Button onPress={requestPermission} title="Grant Permission" />
-            </View>
+        Alert.alert(
+            "Camera Permission Needed",
+            "We need your permission to access the camera.",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Grant Permission",
+                    onPress: () => requestPermission(),
+                },
+            ],
+            { cancelable: true }
         );
     }
 
@@ -38,18 +47,18 @@ export default function ScanQr({ setScanQr }: Props) {
                 // Redirect the user to the new chat page with the the user having that key
             }
             if (!inDb) {
-                Alert.alert('QR Code Scanned',"",[
+                Alert.alert('QR Code Scanned', "", [
                     {
                         text: 'Scan Again',
                         onPress: () => setScanned(false),
                     },
                 ]);
             }
-            else{
-                Alert.alert('Unable to Scan',"",[
+            else {
+                Alert.alert('Unable to Scan', "", [
                     {
                         text: 'Ok',
-                        onPress: () =>{ setScanned(false); setScanQr(false); },
+                        onPress: () => { setScanned(false); setScanQr(false); },
                     },
                 ]);
 

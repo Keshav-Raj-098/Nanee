@@ -1,86 +1,126 @@
 import { Image } from 'expo-image';
-import { Platform, ScrollView, StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View, Text, TouchableOpacity, TextInput, FlatList, TouchableHighlight, Modal, Pressable } from 'react-native';
 import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './index'
-import { getTimeAgo } from '@/lib/utils';
+import ChatBox from '@/components/chatBox';
 import { router } from 'expo-router';
 import { debounce } from 'lodash';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 
 type chat = {
   messageId: string;
+  lastMsg: string;
   time: string;
 }
 
 export default function NewChatScreen() {
 
   // Should be fetched from the server with most recent chats first
-  const chatsData = [
-    { messageId: "msg_001", time: "2025-05-24T10:15:00Z" },
-    { messageId: "msg_011", time: "2025-05-24T11:45:30Z" },
-    { messageId: "msg_003", time: "2025-05-24T08:10:00Z" },
-    { messageId: "msg_004", time: "2025-05-23T22:25:15Z" },
-    { messageId: "msg_012", time: "2025-05-24T10:55:45Z" },
-    { messageId: "msg_006", time: "2025-05-22T10:30:45Z" },
-    { messageId: "msg_007", time: "2025-05-21T17:30:45Z" },
-    { messageId: "msg_008", time: "2025-05-18T10:30:45Z" },
-    { messageId: "msg_013", time: "2025-05-24T11:59:45Z" },
-    { messageId: "msg_010", time: "2025-05-24T09:30:45Z" },
-  ];
+  const chatsData: chat[] = [
+    { messageId: "msg_001", lastMsg: "Hey, are you free today?", time: "2025-05-18T10:30:45Z" },
+    { messageId: "msg_002", lastMsg: "Let's catch up in the evening.", time: "2025-05-21T17:30:45Z" },
+    { messageId: "msg_003", lastMsg: "Project submission is tomorrow.", time: "2025-05-22T10:30:45Z" },
+    { messageId: "msg_004", lastMsg: "Did you complete the assignment?", time: "2025-05-23T22:25:15Z" },
+    { messageId: "msg_005", lastMsg: "I’ll send the notes soon.", time: "2025-05-24T08:10:00Z" },
+    { messageId: "msg_006", lastMsg: "Meeting at 10 AM confirmed.", time: "2025-05-24T09:30:45Z" },
+    { messageId: "msg_007", lastMsg: "Can you review the code?", time: "2025-05-24T10:15:00Z" },
+    { messageId: "msg_008", lastMsg: "Looks good to me!", time: "2025-05-24T10:55:45Z" },
+    { messageId: "msg_009", lastMsg: "Almost done, 5 mins more.", time: "2025-05-24T11:45:30Z" },
+    { messageId: "msg_010", lastMsg: "Final version uploaded.", time: "2025-05-24T11:59:45Z" },
+    { messageId: "msg_011", lastMsg: "Awesome work, team!", time: "2025-05-24T12:30:00Z" }]
+
 
 
   const [chats, setChats] = useState<chat[]>(chatsData)
+  const [startNewChat, setStartNewChat] = useState<boolean>(false)
 
 
   const handlePress = debounce(() => {
     router.push(`/(screens)/chatting`);
-  }, 300); // 300ms debounce
+  }, 600); // 600ms debounce
 
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: 15, maxWidth: 500, }}>
-      <View style={styles.mainContainer}>
+    // <SafeAreaView style={{ flex: 1, paddingHorizontal: 15, maxWidth: 500, }}>
+    <View style={[styles.mainContainer, { position: "relative" }]}>
 
+      {/* Modal */}
+      <Modal
+        animationType="fade"
+        transparent
+        visible={startNewChat}
+        onRequestClose={() => setStartNewChat(false)}
+      >
+        <View style={{
+          flex: 1,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <View style={styles.container}>
+            <Text style={styles.cardTitle}>New Chat</Text>
 
-        <View style={styles.container}>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter User ID"
+              placeholderTextColor="#9ca3af"
+            />
 
-          <Text style={styles.cardTitle}>New Chat</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter User ID"
-            placeholderTextColor="#9ca3af"
-          />
+            <TouchableOpacity>
+              <View style={styles.buttons}>
+                <Text style={{ color: "#9ca3af" }}>Connect</Text>
+              </View>
+            </TouchableOpacity>
 
-
-          <TouchableOpacity >
-            <View style={{ ...styles.buttons, backgroundColor: "#111827", width: "100%", alignItems: "center", borderColor: "#166534", borderRadius: 15, marginBottom: 10 }}>
-              <Text style={{ color: "#9ca3af" }}>Connect</Text>
-            </View>
-          </TouchableOpacity>
-
+            <Pressable onPress={() => setStartNewChat(false)}>
+              <Text style={{
+                color: "#ef4444",
+                textAlign: "center",
+                marginTop: 10
+              }}>Cancel</Text>
+            </Pressable>
+          </View>
         </View>
+      </Modal >
 
-        <Text
-          style={{ color: "#9ca3af", alignSelf: "flex-start", fontSize: 15, marginTop: 10, marginBottom: 10 }}
-        >{`Recent Chats`}</Text>
-        <ScrollView style={{ flex: 1, width: "100%", }} scrollEnabled={true} showsVerticalScrollIndicator={false}>
+      <TouchableHighlight
+        underlayColor={"#0e7490"}
+        onPress={() => {
+          setStartNewChat(true);
+        }}
+        style={{
+          padding: 15, backgroundColor: "#06b6d4", borderRadius: 15,
+          position: "absolute", bottom: 30, right: 30, zIndex: 500, elevation: 5,
+        }}>
+        <MaterialCommunityIcons name="chat-plus" size={26} color="white" />
+      </TouchableHighlight>
 
-          {chats && chats.length > 0 ? (
+      <FlatList
+        data={chats}
+        keyExtractor={(item, index) => item.messageId || index.toString()}
+        renderItem={({ item }) => (
+          <ChatBox chat={item} handlePress={handlePress} />
+        )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1, width: "100%", }}
+        ListEmptyComponent={
+          <Text style={{
+            color: "#9ca3af",
+            alignSelf: "center",
+            fontSize: 15,
+            marginTop: 100,
+          }}>
+            No Recent Chats
+          </Text>
+        }
+      />
 
-            chats.map((chat, index) => (
-              <TouchableOpacity key={index} onPress={handlePress}  >
-                <View style={{ ...styles.container, flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                  <Text style={{ ...styles.cardTitle, fontWeight: "semibold" }}>{chat.messageId}</Text>
-                  <Text style={{ color: "#9ca3af", fontSize: 12 }}>{getTimeAgo(chat.time)}</Text>
-                </View></TouchableOpacity>)))
-            :
-            <Text style={{ color: "#9ca3af", alignSelf: "center", fontSize: 15, marginTop: 100, }}>No Recent Chats</Text>
-          }
-        </ScrollView>
 
 
-      </View>
-    </SafeAreaView>
+    </View >
+    // </SafeAreaView>
   );
 }

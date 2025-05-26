@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 import { copyToClipboard } from '@/lib/utils';
 import QRCodeDisplay from '@/components/Qrdisplay';
 import ScanQr from '@/components/ScanQr';
+import { Feather } from '@expo/vector-icons';
 
 
 
@@ -45,130 +46,150 @@ export default function HomeScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
-      <SafeAreaView style={{ flex: 1 }}>
+      {scanQr ? <ScanQr setScanQr={setScanQr} /> :
 
-        {scanQr ? <ScanQr setScanQr={setScanQr} /> :
-          <ScrollView style={{ width: "100%", }} showsVerticalScrollIndicator={false}>
-            <View style={styles.mainContainer}>
-              <Text
-                style={{ color: "#9ca3af", fontSize: 17 }}
-              >{`Account Created Globally:${accntNo}`}</Text>
+        <ScrollView style={{ width: "100%", }} 
+        showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.mainContainer}>
+            <Text
+              style={{ color: "#9ca3af", fontSize: 17, marginBottom:10, }}
+            >{`Account Created Globally:${accntNo}`}</Text>
 
-              <View style={styles.container}>
-                <Text style={styles.cardTitle} >Your Keys</Text>
+            <View style={styles.container}>
+              <Text style={styles.cardTitle} >Your Keys</Text>
 
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
 
 
-                  <Text
-                    style={{
-                      color: "#9ca3af",
-                      fontSize: 15,
-                    }}
-                  >Public </Text>
-                  <MaterialIcons name={`${showPublickey ? "visibility-off" : "visibility"}`} size={24} color="#9ca3af" onPress={() => {
-                    setShowPublickey(!showPublickey);
-                  }} />
-
-                </View>
-                <View style={{ width: "90%", marginVertical: 10, height: 40 }}>
-                  {
-                    showPublickey ? (
-                      <Text style={{ color: "#9ca3af" }}>{publicKey}</Text>
-                    ) : (
-                      <Text style={{ color: "#9ca3af", fontSize: 16 }}>
-                        {"*".repeat(publicKey.length)}
-                      </Text>
-                    )
-                  }
-                </View>
-
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
-                  <TouchableOpacity
-                    onPress={() => setShowQR(true)}
-                  >
-                    <View style={styles.buttons}>
-                      <Text style={{ color: "#9ca3af" }}>Show QR</Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
+                <Text
+                  style={{
+                    color: "#9ca3af",
+                    fontSize: 15,
+                  }}
+                >Public </Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+                  <MaterialIcons name="content-copy" size={18} color="#9ca3af"
                     onPress={() => {
                       copyToClipboard(publicKey);
                       Toast.show({
                         type: 'success',
-                        text1: 'Copied to clipboard',
+                        text1: 'public key Copied',
                         swipeable: true,
                         position: 'top',
                         visibilityTime: 900,
                       });
 
-                    }}>
-                    <View style={styles.buttons} >
-                      <Text style={{ color: "#9ca3af" }}>Copy Key</Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      setScanQr(true)
                     }}
-                  >
-                    <View style={styles.buttons}>
-                      <Text style={{ color: "#9ca3af" }}>Scan QR</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-
-
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 25 }}>
-
-                  <Text
-                    style={{
-                      color: "#9ca3af",
-                      fontSize: 15,
-                    }}
-                  >Private </Text>
-                  <MaterialIcons name={`${showPrivatekey ? "visibility-off" : "visibility"}`} size={24} color="#9ca3af" onPress={() => {
-                    setShowPrivatekey(!showPrivatekey);
+                  />
+                  <Feather name={`${showPublickey ? "eye-off" : "eye"}`} size={21} color="#9ca3af" onPress={() => {
+                    setShowPublickey(!showPublickey);
                   }} />
-                </View>
-                <View style={{ width: "90%", marginVertical: 10, height: 40 }}>
-                  {
-                    showPrivatekey ? (
-                      <Text style={{ color: "#9ca3af" }}>{privateKey}</Text>
-                    ) : (
-                      <Text style={{ color: "#9ca3af", fontSize: 16 }}>
-                        {"*".repeat(privateKey.length)}
-                      </Text>
-                    )
-                  }
                 </View>
 
               </View>
+              <View style={{ width: "90%", marginVertical: 10, height: 40 }}>
+                {
+                  showPublickey ? (
+                    <Text style={{ color: "#9ca3af" }}>{publicKey}</Text>
+                  ) : (
+                    <Text style={{ color: "#9ca3af", fontSize: 16 }}>
+                      {"*".repeat(publicKey.length)}
+                    </Text>
+                  )
+                }
+              </View>
 
-              <View style={styles.container}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20, }}>
+                <TouchableOpacity
+                  onPress={() => setShowQR(true)}
+                  style={{ width: "47%" }}
+                >
+                  <View style={styles.buttons}>
+                    <Text style={{ color: "#9ca3af" }}>Show QR</Text>
+                  </View>
+                </TouchableOpacity>
 
-                <Text style={styles.cardTitle}>Recover Account</Text>
-                <TextInput
-                  style={styles.input}
-                  value={recoverKey}
-                  onChange={(e) => setRecoverKey(e.nativeEvent.text)}
-                  placeholder="Paste Your Private Key"
-                  placeholderTextColor="#9ca3af"
-                />
 
-
-                <TouchableOpacity >
-                  <View style={{ ...styles.buttons, backgroundColor: "#111827", width: "100%", alignItems: "center", borderColor: "#06b6d4", borderRadius: 15, marginBottom: 10 }}>
-                    <Text style={{ color: "#9ca3af" }}>Recover</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setScanQr(true)
+                  }}
+                  style={{ width: "47%" }}
+                >
+                  <View style={styles.buttons}>
+                    <Text style={{ color: "#9ca3af" }}>Scan QR</Text>
                   </View>
                 </TouchableOpacity>
               </View>
+
+
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 25 }}>
+
+                <Text
+                  style={{
+                    color: "#9ca3af",
+                    fontSize: 15,
+                  }}
+                >Private </Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+                  <MaterialIcons name="content-copy" size={18} color="#9ca3af"
+                    onPress={() => {
+                      copyToClipboard(privateKey);
+                      Toast.show({
+                        type: 'success',
+                        text1: 'private key Copied',
+                        swipeable: true,
+                        position: 'top',
+                        visibilityTime: 900,
+                      });
+
+                    }}
+                  />
+                  <Feather name={`${showPrivatekey ? "eye-off" : "eye"}`} size={21} color="#9ca3af" onPress={() => {
+                    setShowPrivatekey(!showPrivatekey);
+                  }} />
+                </View>
+              </View>
+              <View style={{ width: "90%", marginVertical: 10, height: 40 }}>
+                {
+                  showPrivatekey ? (
+                    <Text style={{ color: "#9ca3af" }}>{privateKey}</Text>
+                  ) : (
+                    <Text style={{ color: "#9ca3af", fontSize: 16 }}>
+                      {"*".repeat(privateKey.length)}
+                    </Text>
+                  )
+                }
+              </View>
+
             </View>
-          </ScrollView>
-        }
-      </SafeAreaView >
+
+            <View style={[styles.container,{marginTop:15}]}>
+
+              <Text style={styles.cardTitle}>Recover Account</Text>
+              <TextInput
+                style={styles.input}
+                value={recoverKey}
+                onChange={(e) => setRecoverKey(e.nativeEvent.text)}
+                placeholder="Paste Your Private Key"
+                placeholderTextColor="#9ca3af"
+              />
+
+
+              <TouchableOpacity >
+                <View style={{ ...styles.buttons, backgroundColor: "#111827", width: "100%", alignItems: "center", borderColor: "#06b6d4", borderRadius: 15, marginBottom: 10 }}>
+                  <Text style={{ color: "#9ca3af" }}>Recover</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      }
+
+
+
+
       <Modal
         transparent
         animationType="slide"
@@ -190,7 +211,7 @@ export default function HomeScreen() {
 }
 
 export const styles = StyleSheet.create({
-  mainContainer: { flex: 1, flexDirection: "column", justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'black', paddingVertical: 25, color: "#fff", paddingHorizontal: 15 },
+  mainContainer: { flex: 1, flexDirection: "column", justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'black', color: "#fff", paddingHorizontal: 15 },
 
   container: {
     width: "100%",
@@ -198,7 +219,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    marginTop: 15,
+    marginTop: 5
   },
   cardTitle: {
     color: "#9ca3af",
@@ -206,7 +227,8 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttons: {
-    // height: 50,
+    width: "100%",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: "#8249c2",
     backgroundColor: "transparent",
