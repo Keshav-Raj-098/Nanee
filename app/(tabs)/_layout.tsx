@@ -9,61 +9,12 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import logo from "@/assets/images/Nanee_logo.png";
 import { Colors } from '@/constants/Colors';
 import { useState, useRef } from 'react';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Toast from 'react-native-toast-message';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Octicons from '@expo/vector-icons/Octicons';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-
-type MenuItemProps = {
-  title: string;
-  color?: string;
-  routeTo?: '/(screens)/aboutUs';
-  icon?: React.ReactNode;
-}
-
-
-function MenuItem({ title, color, icon, routeTo }: MenuItemProps) {
-  const router = useRouter();
-
-  return (
-    <TouchableHighlight
-      onPress={() => {
-        if (routeTo) {
-          router.push(routeTo);
-        } else {
-          Toast.show({
-            type: 'info',
-            text1: 'Route Not Defined',
-            swipeable: true,
-            position: 'top',
-            visibilityTime: 900,
-          });
-        }
-      }}
-      underlayColor="#1f2631"
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        borderRadius: 8,
-        backgroundColor: color || Colors.dark.background,
-      }}
-    >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-        {icon && <View style={{ marginRight: 10 }}>{icon}</View>}
-        <Text style={{ color: 'white', fontSize: 15 }}>{title}</Text>
-      </View>
-    </TouchableHighlight>
-  );
-}
-
 
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const router = useRouter();
   const menuRef = useRef(null);
 
@@ -111,7 +62,7 @@ export default function TabLayout() {
         ]}
       >
         {/* Left: Logo */}
-        <Image
+        {/* <Image
           source={logo}
           style={{
             width: 40,
@@ -119,15 +70,15 @@ export default function TabLayout() {
             resizeMode: 'contain',
 
           }}
-        />
+        /> */}
 
         {/* Title */}
-        <Text style={[styles.headerTitle, { color: colorScheme === 'dark' ? '#fff' : '#000' }]}>
-          Nanee
+        <Text style={[styles.headerTitle, { color: '#fff', fontSize: 33, fontWeight: "bold" }]}>
+          nanee
         </Text>
 
-        <TouchableWithoutFeedback 
-        onPress={()=>{router.push('/(screens)/aboutUs') }}
+        <TouchableWithoutFeedback
+          onPress={() => { router.push('/(screens)/aboutUs') }}
         >
 
           <Octicons name="info" size={24} color="#8e8e93" style={{ paddingEnd: 15 }} />
@@ -137,7 +88,7 @@ export default function TabLayout() {
 
 
 
-       
+
       </View>
 
 
@@ -170,8 +121,17 @@ export default function TabLayout() {
           name="index"
           options={{
             title: 'Dashboard',
-            tabBarIcon: ({ color }: { color: string }) => <Feather name="home" size={28} color={color} />,
-          }}
+            tabBarIcon: ({ color }: { color: string }) => (
+            
+              <Image
+                source={logo}
+                style={{
+                  width: 40,
+                  height: 40,
+                  resizeMode: 'contain',
+                }}
+              />
+   ) }}
         />
         <Tabs.Screen
           name="chats"
@@ -179,6 +139,17 @@ export default function TabLayout() {
             title: 'Chats',
             tabBarIcon: ({ color }: { color: string }) => (
               <Ionicons name="chatbox-ellipses-outline" size={28} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="calls"
+          options={{
+            title: 'Calls',
+
+            tabBarIcon: ({ color }: { color: string }) => (
+
+              < Ionicons name="call-outline" size={ 28} color={ color } />
             ),
           }}
         />
@@ -209,5 +180,5 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: 10,
   },
-  
+
 });
