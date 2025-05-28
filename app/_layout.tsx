@@ -63,8 +63,8 @@ export default function RootLayout() {
         )}
         <Stack.Screen name="+not-found" />
       </Stack>
-      <Toast />
-      <StatusBar style="auto"  backgroundColor='000000' />
+      <Toast swipeable={true}/>
+      <StatusBar backgroundColor='000000' />
     </ThemeProvider>
   );
 }

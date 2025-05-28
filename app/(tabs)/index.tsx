@@ -6,8 +6,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Toast from 'react-native-toast-message';
 import { copyToClipboard } from '@/lib/utils';
 import QRCodeDisplay from '@/components/Qrdisplay';
-import ScanQr from '@/components/ScanQr';
+import ScanQr from '@/app/(screens)/ScanQr';
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 
 
@@ -21,7 +22,6 @@ export default function HomeScreen() {
   const [showPublickey, setShowPublickey] = useState<boolean>(false);
   const [showPrivatekey, setShowPrivatekey] = useState<boolean>(false);
   const [showQR, setShowQR] = useState<boolean>(false);
-  const [scanQr, setScanQr] = useState<boolean>(false);
 
 
 
@@ -29,7 +29,6 @@ export default function HomeScreen() {
     useCallback(() => {
       // Reset your useState variables when this screen is focused
       setShowQR(false);
-      setScanQr(false);
       setShowPublickey(false);
       setShowPrivatekey(false);
       setRecoverKey("");
@@ -44,9 +43,8 @@ export default function HomeScreen() {
 
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+      style={{ flex: 1, }}
     >
-      {scanQr ? <ScanQr setScanQr={setScanQr} /> :
 
         <ScrollView style={{ width: "100%", }} 
         showsVerticalScrollIndicator={false}
@@ -113,7 +111,8 @@ export default function HomeScreen() {
 
                 <TouchableOpacity
                   onPress={() => {
-                    setScanQr(true)
+                    router.push("/(screens)/ScanQr");
+                    return;
                   }}
                   style={{ width: "47%" }}
                 >
@@ -185,9 +184,6 @@ export default function HomeScreen() {
             </View>
           </View>
         </ScrollView>
-      }
-
-
 
 
       <Modal
@@ -255,7 +251,7 @@ export const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     borderRadius: 12,
-    padding: 20,
+    padding:12,
     width: '80%',
     alignItems: 'center',
   },
