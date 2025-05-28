@@ -1,7 +1,7 @@
 import { Tabs, useRouter } from 'expo-router';
 import React from 'react';
 import { Platform, View, Text, StyleSheet, Image, TouchableOpacity, TouchableHighlight, TouchableNativeFeedback, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
@@ -13,7 +13,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Toast from 'react-native-toast-message';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import Octicons from '@expo/vector-icons/Octicons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 type MenuItemProps = {
   title: string;
@@ -75,9 +76,9 @@ export default function TabLayout() {
       {
         isOpen && (
 
-           <TouchableWithoutFeedback
-           
-           onPress={() => setIsOpen(false)}>
+          <TouchableWithoutFeedback
+
+            onPress={() => setIsOpen(false)}>
             <View
               style={{
                 position: 'absolute',
@@ -99,7 +100,7 @@ export default function TabLayout() {
         style={[
           styles.header,
           {
-            backgroundColor: colorScheme === 'dark' ? '0000' : '#ffffff',
+            backgroundColor: '0000',
             paddingTop: 30,
             paddingHorizontal: 10,
             display: 'flex',
@@ -125,39 +126,18 @@ export default function TabLayout() {
           Nanee
         </Text>
 
-        {/* Right: Button */}
-        <TouchableOpacity
-          onPress={() => { setIsOpen(!isOpen) }}
+        <TouchableWithoutFeedback 
+        onPress={()=>{router.push('/(screens)/aboutUs') }}
         >
-          <Entypo name="dots-three-vertical" size={25} color={colorScheme === 'dark' ? '#fff' : '#000'} />
-        </TouchableOpacity>
 
+          <Octicons name="info" size={24} color="#8e8e93" style={{ paddingEnd: 15 }} />
 
-        {/* Menu Items */}
-        {
-          isOpen && (
-            <TouchableNativeFeedback
-              style={{ position: 'absolute', top: 0, right: 0, backgroundColor: "red", width: "100%", height: "100%" }}
-              onPress={() => { setIsOpen(false) }}
-            >
-              <View style={styles.threeDotMenu}>
-
-                <MenuItem title='About Us' routeTo='/(screens)/aboutUs' icon={
-                  <MaterialIcons name="info-outline" size={24} color={Colors.dark.iconColor} />} />
-
-                <MenuItem title='Profile' routeTo='/(screens)/aboutUs' icon={
-                  <MaterialIcons name="face" size={24} color={Colors.dark.iconColor} />} />
-
-                <MenuItem title='Logout' routeTo='/(screens)/aboutUs' icon={
-                  <MaterialIcons name="logout" size={24} color={Colors.dark.iconColor} />} />
+        </TouchableWithoutFeedback>
 
 
 
-              </View>
-            </TouchableNativeFeedback>
 
-          )
-        }
+       
       </View>
 
 
@@ -229,21 +209,5 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: 10,
   },
-  threeDotMenu: {
-    position: 'absolute',
-    top: 70,
-    right: 35,
-    width: 150,
-    borderRadius: 8,
-    backgroundColor: Colors.dark.background,
-    shadowColor: '#000',
-    zIndex: 1000,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  }
+  
 });

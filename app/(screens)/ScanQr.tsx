@@ -2,12 +2,9 @@ import { CameraView, CameraType, useCameraPermissions, BarcodeScanningResult } f
 import { useState } from 'react';
 import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { router } from 'expo-router';
 
-type Props = {
-    setScanQr: any; //to be changed
-};
-
-export default function ScanQr({ setScanQr }: Props) {
+export default function ScanQr() {
     const [facing, setFacing] = useState<CameraType>('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [scanned, setScanned] = useState(false);
@@ -58,7 +55,7 @@ export default function ScanQr({ setScanQr }: Props) {
                 Alert.alert('Unable to Scan', "", [
                     {
                         text: 'Ok',
-                        onPress: () => { setScanned(false); setScanQr(false); },
+                        onPress: () => { setScanned(false); router.back(); },
                     },
                 ]);
 
@@ -78,7 +75,7 @@ export default function ScanQr({ setScanQr }: Props) {
                 onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
             >
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => { setScanQr(false) }}>
+                    <TouchableOpacity onPress={() => { router.back(); }} style={styles.button}>
                         <MaterialIcons name="close" size={30} color="white" />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
@@ -108,7 +105,7 @@ const styles = StyleSheet.create({
         gap: 25,
         padding: 20,
         position: 'absolute',
-        top: 10,
+        top: 30,
         alignItems: 'flex-end',
         width: '100%',
     },

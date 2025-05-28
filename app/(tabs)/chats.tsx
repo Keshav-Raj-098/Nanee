@@ -42,49 +42,56 @@ export default function NewChatScreen() {
     router.push(`/(screens)/chatting`);
   }, 600); // 600ms debounce
 
+  function ShowNewChatModal() {
+
+    return (<Modal
+      animationType="fade"
+      transparent
+      visible={startNewChat}
+      onRequestClose={() => setStartNewChat(false)}
+    >
+      <View style={{
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 15,
+      }}>
+        <View style={styles.container}>
+          <Text style={styles.cardTitle}>New Chat</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Enter User ID"
+            placeholderTextColor="#9ca3af"
+          />
+
+          <TouchableOpacity>
+            <View style={styles.buttons}>
+              <Text style={{ color: "#9ca3af" }}>Connect</Text>
+            </View>
+          </TouchableOpacity>
+
+          <Pressable onPress={() => setStartNewChat(false)}>
+            <Text style={{
+              color: "#ef4444",
+              textAlign: "center",
+              marginTop: 10
+            }}>Cancel</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal >
+    )
+  }
 
   return (
     // <SafeAreaView style={{ flex: 1, paddingHorizontal: 15, maxWidth: 500, }}>
     <View style={[styles.mainContainer, { position: "relative" }]}>
 
       {/* Modal */}
-      <Modal
-        animationType="fade"
-        transparent
-        visible={startNewChat}
-        onRequestClose={() => setStartNewChat(false)}
-      >
-        <View style={{
-          flex: 1,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <View style={styles.container}>
-            <Text style={styles.cardTitle}>New Chat</Text>
+      <ShowNewChatModal/>
 
-            <TextInput
-              style={styles.input}
-              placeholder="Enter User ID"
-              placeholderTextColor="#9ca3af"
-            />
-
-            <TouchableOpacity>
-              <View style={styles.buttons}>
-                <Text style={{ color: "#9ca3af" }}>Connect</Text>
-              </View>
-            </TouchableOpacity>
-
-            <Pressable onPress={() => setStartNewChat(false)}>
-              <Text style={{
-                color: "#ef4444",
-                textAlign: "center",
-                marginTop: 10
-              }}>Cancel</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal >
 
       <TouchableHighlight
         underlayColor={"#0e7490"}
